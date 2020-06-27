@@ -4,15 +4,29 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinColumn,
 } from 'typeorm';
 
+import User from './User';
+
+/**
+ * Relacionamentos
+ * Um para um(OneToOne)
+ * Um para muitos (OneToMany)
+ * Muitos para muitos (ManuToMany)
+ */
 @Entity('appointments')
 class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  provider: string;
+  provider_id: string;
+
+  @ManyToMany(() => User)
+  @JoinColumn({ name: 'provider_id' })
+  provider: User;
 
   @Column('timestamp with time zone') // postgres
   date: Date;
