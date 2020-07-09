@@ -1,4 +1,5 @@
 import { hash } from 'bcryptjs';
+import 'reflect-metadata';
 import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
