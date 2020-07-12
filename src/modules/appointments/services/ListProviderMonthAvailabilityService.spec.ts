@@ -13,10 +13,6 @@ describe('ListProviderMonthAvailability', () => {
   });
 
   it('should be able to list the month availability from provider', async () => {
-    await fakeAppointmentsRepository.create({
-      provider_id: 'user',
-      date: new Date(2020, 5, 12, 8, 0, 0),
-    });
     // Brazil UTC-3
     await fakeAppointmentsRepository.create({
       provider_id: 'user',
@@ -24,8 +20,41 @@ describe('ListProviderMonthAvailability', () => {
     });
     await fakeAppointmentsRepository.create({
       provider_id: 'user',
+      date: new Date(2020, 6, 12, 9, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
       date: new Date(2020, 6, 12, 10, 0, 0),
     });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 11, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 12, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 13, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 14, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 15, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 16, 0, 0),
+    });
+    await fakeAppointmentsRepository.create({
+      provider_id: 'user',
+      date: new Date(2020, 6, 12, 17, 0, 0),
+    });
+
     await fakeAppointmentsRepository.create({
       provider_id: 'user',
       date: new Date(2020, 6, 13, 8, 0, 0),
@@ -41,7 +70,7 @@ describe('ListProviderMonthAvailability', () => {
       expect.arrayContaining([
         { day: 11, available: true },
         { day: 12, available: false },
-        { day: 13, available: false },
+        { day: 13, available: true },
         { day: 14, available: true },
       ]),
     );
