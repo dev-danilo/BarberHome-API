@@ -1,4 +1,3 @@
-import User from '@modules/users/infra/typeorm/entities/User';
 import 'reflect-metadata';
 import { getDaysInMonth, getDate } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
