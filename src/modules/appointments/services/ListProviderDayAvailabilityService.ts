@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { getHours, isAfter } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
-import { compare } from 'bcryptjs';
 
 interface IRequest {
   provider_id: string;
