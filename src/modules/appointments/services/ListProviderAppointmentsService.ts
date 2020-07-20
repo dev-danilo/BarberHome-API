@@ -16,6 +16,7 @@ class ListProviderAppointmentsService {
   constructor(
     @inject('AppointmentsRepository')
     private appointmentRepository: IAppointmentsRepository,
+
     @inject('CacheProvider')
     private cacheProvider: ICacheProvider,
   ) {}
