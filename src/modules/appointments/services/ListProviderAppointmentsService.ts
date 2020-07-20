@@ -27,17 +27,22 @@ class ListProviderAppointmentsService {
     year,
     day,
   }: IRequest): Promise<Appointment[]> {
-    const cacheData = await this.cacheProvider.recover('asd');
-    console.log(cacheData);
-    const appointments = await this.appointmentRepository.findAllInDayFromProvider(
-      {
+    /* const cacheData = await this.cacheProvider.recover('asd');
+    console.log(cacheData); */
+    const cachKey = `provider-appointments:${provider_id}:${year}:${month}:${day}`;
+    let appointments = await this.cacheProvider.recover<Appointment[]>(cachKey);
+
+    if (!appointments) {
+      appointments = await this.appointmentRepository.findAllInDayFromProvider({
         provider_id,
         month,
         year,
         day,
-      },
-    );
-    // await this.cacheProvider.save('asd', 'asd');
+      });
+      console.log('buscou do banco'); // nao esta compartilhando cache de dois dias diferentes
+      await this.cacheProvider.save(cachKey, appointments);
+    }
+
     return appointments;
   }
 }
