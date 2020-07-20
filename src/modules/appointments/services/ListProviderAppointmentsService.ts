@@ -38,8 +38,9 @@ class ListProviderAppointmentsService {
         month,
         year,
         day,
-      });
-      console.log('buscou do banco'); // nao esta compartilhando cache de dois dias diferentes
+      }); // nao esta compartilhando cache de dois dias diferentes
+      /*  console.log('buscou do banco'); */
+
       await this.cacheProvider.save(cachKey, appointments);
     }
 
