@@ -31,8 +31,8 @@ class ListProviderAppointmentsService {
     /* const cacheData = await this.cacheProvider.recover('asd');
     console.log(cacheData); */
     const cachKey = `provider-appointments:${provider_id}:${year}:${month}:${day}`;
-    /* let appointments = await this.cacheProvider.recover<Appointment[]>(cachKey);
-     */ let appointments;
+    // let appointments = await this.cacheProvider.recover<Appointment[]>(cachKey);
+    let appointments;
     if (!appointments) {
       appointments = await this.appointmentRepository.findAllInDayFromProvider({
         provider_id,
