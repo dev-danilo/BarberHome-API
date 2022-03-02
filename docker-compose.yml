@@ -1,0 +1,23 @@
+version: "3.1"
+
+services:
+  barberhome_db:
+    image: postgres
+    container_name: barberhome_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: barberhome_postgres
+    ports:
+      - 5432:5432
+
+  barberhome_mongo:
+    image: mongo
+    container_name: barberhome_mongo
+    ports:
+      - 27017:27017
+  barberhome_redis:
+    image: redis:alpine
+    container_name: barberhome_redis
+    ports:
+      - 6379:6379

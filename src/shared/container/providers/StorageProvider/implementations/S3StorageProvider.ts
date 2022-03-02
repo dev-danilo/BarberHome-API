@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import mime from 'mime';
 import aws, { S3 } from 'aws-sdk';
-
-import uploadConfig from '@config/upload';
+import mime from 'mime';
+import uploadConfig from '@config/storage';
+// import { AWS_S3_BUCKET } from '@shared/utils/environment';
+import AppError from '@shared/errors/AppError';
 import IStorageProvider from '../models/IStorageProvider';
 
 class S3StorageProvider implements IStorageProvider {
@@ -11,43 +12,43 @@ class S3StorageProvider implements IStorageProvider {
 
   constructor() {
     this.client = new aws.S3({
-      region: 'us-east-2',
+      region: 'us-east-1',
     });
   }
 
   public async saveFile(file: string): Promise<string> {
     const originalPath = path.resolve(uploadConfig.tmpFolder, file);
 
-    const ContentType = mime.getType(originalPath);
+    const fileContent = await fs.promises.readFile(originalPath, {
+      encoding: null,
+    });
 
-    if (!ContentType) {
-      throw new Error('File not found');
+    const fileType = mime.getType(originalPath);
+
+    if (!fileType) {
+      throw new AppError('File does not exists');
     }
 
-    const fileContent = await fs.promises.readFile(originalPath);
-
-    await this.client
-      .putObject({
-        Bucket: uploadConfig.config.aws.bucket,
-        Key: file,
-        ACL: 'public-read',
-        Body: fileContent,
-        ContentType,
-      })
-      .promise();
-
-    await fs.promises.unlink(originalPath);
+    // await this.client
+    //   .putObject({
+    //     Bucket: /*AWS_S3_BUCKET ||*/ 'barberhome-danilopereira',
+    //     Key: file,
+    //     ACL: 'public-read',
+    //     ContentType: fileType,
+    //     Body: fileContent,
+    //   })
+    //   .promise();
 
     return file;
   }
 
   public async deleteFile(file: string): Promise<void> {
-    await this.client
-      .deleteObject({
-        Bucket: uploadConfig.config.aws.bucket,
-        Key: file,
-      })
-      .promise();
+    // await this.client
+    //   .deleteObject({
+    //     Bucket: /*AWS_S3_BUCKET ||*/ 'barberhome-danilopereira',
+    //     Key: file,
+    //   })
+    //   .promise();
   }
 }
 

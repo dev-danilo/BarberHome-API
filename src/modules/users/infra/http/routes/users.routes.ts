@@ -1,19 +1,22 @@
 import { Router } from 'express';
-import multer from 'multer';
 
-import uploadConfig from '@config/upload';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import UsersController from '@modules/users/infra/http/controllers/UsersController';
-import UserAvatarController from '@modules/users/infra/http/controllers/UserAvatarController';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+import multer from 'multer';
+
+import uploadConfig from '@config/storage';
+
+import ensureAuthentication from '../middlewares/EnsureAuthentication';
+
+import UsersController from '../controllers/UsersController';
+import UserAvatarController from '../controllers/UserAvatarController';
 
 const usersRouter = Router();
-const upload = multer(uploadConfig.multer);
 
 const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
-// Rota: receber a requisição, chamar outro arquivo, devolver a resposta
+
+const upload = multer(uploadConfig.multer);
 
 usersRouter.post(
   '/',
@@ -21,7 +24,7 @@ usersRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().required(),
+      password: Joi.string().min(6).required(),
     },
   }),
   usersController.create,
@@ -29,9 +32,9 @@ usersRouter.post(
 
 usersRouter.patch(
   '/avatar',
-  ensureAuthenticated,
+  ensureAuthentication,
   upload.single('avatar'),
   userAvatarController.update,
-); // rota autenticada
+);
 
 export default usersRouter;

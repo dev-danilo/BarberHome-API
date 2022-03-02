@@ -1,6 +1,6 @@
-import 'reflect-metadata';
-import { getDaysInMonth, getDate, isAfter } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
+import { getDaysInMonth, getDate, isAfter, endOfDay } from 'date-fns';
+
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 
 interface IRequest {
@@ -9,28 +9,34 @@ interface IRequest {
   year: number;
 }
 
-type IResponse = Array<{ day: number; available: boolean }>;
+type IResponse = Array<{
+  day: number;
+  available: boolean;
+}>;
 
 @injectable()
 class ListProviderMonthAvailabilityService {
+  private appointmentsRepository: IAppointmentsRepository;
+
   constructor(
     @inject('AppointmentsRepository')
-    private appointmentRepository: IAppointmentsRepository,
-  ) {}
+    appointmentsRepository: IAppointmentsRepository,
+  ) {
+    this.appointmentsRepository = appointmentsRepository;
+  }
 
   public async execute({
     provider_id,
     month,
     year,
   }: IRequest): Promise<IResponse> {
-    const appointments = await this.appointmentRepository.findAllInMonthFromProvider(
+    const appointments = await this.appointmentsRepository.findAllInMonthFromProvider(
       {
         provider_id,
-        year,
         month,
+        year,
       },
     );
-    // console.log(appointments);
 
     const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));
 
@@ -39,19 +45,17 @@ class ListProviderMonthAvailabilityService {
       (_, index) => index + 1,
     );
 
-    // console.log(eachDayArray);
-
     const availability = eachDayArray.map(day => {
-      const compareDate = new Date(year, month - 1, day, 23, 59, 59);
+      const compareDate = endOfDay(new Date(year, month - 1, day));
 
       const appointmentsInDay = appointments.filter(appointment => {
         return getDate(appointment.date) === day;
       });
+
       return {
         day,
         available:
           isAfter(compareDate, new Date()) && appointmentsInDay.length < 10,
-        // 17 - 8 = 10 horários disponíveis
       };
     });
 

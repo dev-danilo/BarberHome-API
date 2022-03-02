@@ -1,8 +1,8 @@
-import User from '@modules/users/infra/typeorm/entities/User';
-import 'reflect-metadata';
 import AppError from '@shared/errors/AppError';
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import { injectable, inject } from 'tsyringe';
+
+import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 interface IRequest {
   user_id: string;
@@ -10,12 +10,16 @@ interface IRequest {
 
 @injectable()
 class ShowProfileService {
+  private usersRepository: IUsersRepository;
+
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
-  ) {}
+    usersRepository: IUsersRepository,
+  ) {
+    this.usersRepository = usersRepository;
+  }
 
-  public async execute({ user_id }: IRequest): Promise<User> {
+  public async execute({ user_id }: IRequest): Promise<User | undefined> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {

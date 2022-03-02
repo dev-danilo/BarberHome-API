@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-import ProvidersController from '@modules/appointments/infra/http/controllers/ProvidersController';
-import ProviderDayAvailabilityController from '@modules/appointments/infra/http/controllers/ProviderDayAvailabilityController';
-import ProviderMonthAvailabilityController from '@modules/appointments/infra/http/controllers/ProviderMonthAvailabilityController';
+import ensureAuthentication from '@modules/users/infra/http/middlewares/EnsureAuthentication';
+import ProvidersController from '../controllers/ProvidersController';
+import ProvidersMonthAvailabilitycontroller from '../controllers/ProvidersMonthAvailabilityController';
+import ProvidersDayAvailabilityController from '../controllers/ProvidersDayAvailabilityController';
 
 const providersRouter = Router();
 const providersController = new ProvidersController();
-const providerDayAvailabilityController = new ProviderDayAvailabilityController();
-const providerMonthAvailabilityController = new ProviderMonthAvailabilityController();
+const providersMonthAvailabilityController = new ProvidersMonthAvailabilitycontroller();
+const providersDayAvailabilityController = new ProvidersDayAvailabilityController();
 
-providersRouter.use(ensureAuthenticated);
+providersRouter.use(ensureAuthentication);
 
 providersRouter.get('/', providersController.index);
 providersRouter.get(
@@ -21,7 +21,7 @@ providersRouter.get(
       provider_id: Joi.string().uuid().required(),
     },
   }),
-  providerMonthAvailabilityController.index,
+  providersMonthAvailabilityController.index,
 );
 providersRouter.get(
   '/:provider_id/day-availability',
@@ -30,10 +30,7 @@ providersRouter.get(
       provider_id: Joi.string().uuid().required(),
     },
   }),
-  providerDayAvailabilityController.index,
+  providersDayAvailabilityController.index,
 );
 
 export default providersRouter;
-
-// localhost:3333/providers/:id/day-availability
-// localhost:3333/providers/:id/month-availability

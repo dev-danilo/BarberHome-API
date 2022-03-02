@@ -1,9 +1,9 @@
-import handlebars from 'handlebars';
 import fs from 'fs';
-import IParseMailTemplateDTO from '../dtos/IParseMailTemplateDTO';
+import handlebars from 'handlebars';
 import IMailTemplateProvider from '../models/IMailTemplateProvider';
+import IParseMailTemplateDTO from '../dtos/IParseMailTemplateDTO';
 
-class HandlebarMailTemplateProvider implements IMailTemplateProvider {
+class HandlebarsMailTemplateProvider implements IMailTemplateProvider {
   public async parse({
     file,
     variables,
@@ -16,4 +16,5 @@ class HandlebarMailTemplateProvider implements IMailTemplateProvider {
     return parseTemplate(variables);
   }
 }
-export default HandlebarMailTemplateProvider;
+
+export default HandlebarsMailTemplateProvider;

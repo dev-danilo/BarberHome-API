@@ -1,9 +1,9 @@
-import User from '@modules/users/infra/typeorm/entities/User';
-import 'reflect-metadata';
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import { injectable, inject } from 'tsyringe';
+
+import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
-import { classToClass } from 'class-transformer';
 
 interface IRequest {
   user_id: string;
@@ -11,29 +11,35 @@ interface IRequest {
 
 @injectable()
 class ListProvidersService {
+  private usersRepository: IUsersRepository;
+
+  private cacheProvider: ICacheProvider;
+
   constructor(
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
+    usersRepository: IUsersRepository,
 
     @inject('CacheProvider')
-    private cacheProvider: ICacheProvider,
-  ) {}
+    cacheProvider: ICacheProvider,
+  ) {
+    this.usersRepository = usersRepository;
+    this.cacheProvider = cacheProvider;
+  }
 
   public async execute({ user_id }: IRequest): Promise<User[]> {
-    /*  let users = await this.cacheProvider.recover<User[]>(
+    let users = await this.cacheProvider.recover<User[]>(
       `providers-list:${user_id}`,
-    ); */
-    let users;
+    );
+
     if (!users) {
       users = await this.usersRepository.findAllProviders({
         except_user_id: user_id,
       });
 
-      /* console.log('query feita'); */
-      await this.cacheProvider.save(
-        `providers-list:${user_id}`,
-        classToClass(users),
-      );
+      await this.cacheProvider.save({
+        key: `providers-list:${user_id}`,
+        value: users,
+      });
     }
 
     return users;

@@ -1,52 +1,62 @@
-import 'reflect-metadata';
 import { injectable, inject } from 'tsyringe';
+
+import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 import { classToClass } from 'class-transformer';
-import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
   provider_id: string;
+  day: number;
   month: number;
   year: number;
-  day: number;
 }
 
 @injectable()
-class ListProviderAppointmentsService {
+class ListProviderMonthAvailabilityService {
+  private appointmentsRepository: IAppointmentsRepository;
+
+  private cacheProvider: ICacheProvider;
+
   constructor(
     @inject('AppointmentsRepository')
-    private appointmentRepository: IAppointmentsRepository,
+    appointmentsRepository: IAppointmentsRepository,
 
     @inject('CacheProvider')
-    private cacheProvider: ICacheProvider,
-  ) {}
+    cacheProvider: ICacheProvider,
+  ) {
+    this.appointmentsRepository = appointmentsRepository;
+    this.cacheProvider = cacheProvider;
+  }
 
   public async execute({
     provider_id,
+    day,
     month,
     year,
-    day,
   }: IRequest): Promise<Appointment[]> {
-    /* const cacheData = await this.cacheProvider.recover('asd');
-    console.log(cacheData); */
-    const cachKey = `provider-appointments:${provider_id}:${year}:${month}:${day}`;
-    // let appointments = await this.cacheProvider.recover<Appointment[]>(cachKey);
-    let appointments;
-    if (!appointments) {
-      appointments = await this.appointmentRepository.findAllInDayFromProvider({
-        provider_id,
-        month,
-        year,
-        day,
-      }); // nao esta compartilhando cache de dois dias diferentes
-      /*  console.log('buscou do banco'); */
+    let appointments = await this.cacheProvider.recover<Appointment[]>(
+      `provider-appointments:${provider_id}:${day}-${month}-${year}`,
+    );
 
-      await this.cacheProvider.save(cachKey, classToClass(appointments));
+    if (!appointments) {
+      appointments = await this.appointmentsRepository.findAllInDayFromProvider(
+        {
+          provider_id,
+          day,
+          month,
+          year,
+        },
+      );
+
+      await this.cacheProvider.save({
+        key: `provider-appointments:${provider_id}:${day}-${month}-${year}`,
+        value: classToClass(appointments),
+      });
     }
 
     return appointments;
   }
 }
 
-export default ListProviderAppointmentsService;
+export default ListProviderMonthAvailabilityService;

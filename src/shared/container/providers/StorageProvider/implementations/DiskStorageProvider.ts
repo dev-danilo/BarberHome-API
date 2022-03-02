@@ -1,14 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import uploadConfig from '@config/upload';
+import uploadConfig from '@config/storage';
 import IStorageProvider from '../models/IStorageProvider';
 
-class DisckStorageProvider implements IStorageProvider {
+class DiskStorageProvider implements IStorageProvider {
   public async saveFile(file: string): Promise<string> {
-    await fs.promises.rename(
-      path.resolve(uploadConfig.tmpFolder, file),
-      path.resolve(uploadConfig.uploadsFolder, file),
-    );
+    await fs.promises.rename(path.resolve(uploadConfig.tmpFolder, file));
+
     return file;
   }
 
@@ -17,11 +15,12 @@ class DisckStorageProvider implements IStorageProvider {
 
     try {
       await fs.promises.stat(filePath);
-    } catch {
+    } catch (err) {
       return;
     }
+
     await fs.promises.unlink(filePath);
   }
 }
 
-export default DisckStorageProvider;
+export default DiskStorageProvider;

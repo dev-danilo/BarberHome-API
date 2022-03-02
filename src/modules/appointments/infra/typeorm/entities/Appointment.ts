@@ -4,18 +4,18 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/User';
+
 /**
- * Relacionamentos
- * Um para um(OneToOne)
- * Um para muitos (OneToMany)
- * Muitos para muitos (ManuToMany)
+ * Um para um (oneToOne)
+ * Um para muitos(oneToMany)
+ * Muitos para muitos(manyToMany)
  */
+
 @Entity('appointments')
 class Appointment {
   @PrimaryGeneratedColumn('uuid')
@@ -35,7 +35,7 @@ class Appointment {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column('timestamp with time zone') // postgres
+  @Column('timestamp with time zone')
   date: Date;
 
   @CreateDateColumn()
@@ -44,4 +44,5 @@ class Appointment {
   @UpdateDateColumn()
   updated_at: Date;
 }
+
 export default Appointment;

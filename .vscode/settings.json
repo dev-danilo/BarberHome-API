@@ -1,0 +1,22 @@
+{
+  "sqltools.connections": [
+    {
+      "database": "barberhome",
+      "dialect": "PostgreSQL",
+      "name": "barberhome databases",
+      "password": "docker",
+      "port": 5432,
+      "server": "localhost",
+      "username": "postgres"
+    },
+    {
+      "database": "barberhome",
+      "dialect": "PostgreSQL",
+      "name": "barberhome",
+      "password": "docker",
+      "port": 5432,
+      "server": "localhost",
+      "username": "postgres"
+    }
+  ]
+}

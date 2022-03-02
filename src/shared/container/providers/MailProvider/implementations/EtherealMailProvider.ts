@@ -1,29 +1,34 @@
-import nodemailer, { Transporter } from 'nodemailer';
+/* eslint-disable no-console */
+import { inject, injectable } from 'tsyringe';
+import nodemailer, { TestAccount, Transporter } from 'nodemailer';
 import IMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/models/IMailTemplateProvider';
-import { injectable, inject } from 'tsyringe';
 import IMailProvider from '../models/IMailProvider';
 import ISendMailDTO from '../dtos/ISendMailDTO';
 
 @injectable()
-export default class EtherealMailProvider implements IMailProvider {
-  private client: Transporter;
+class EtherealMailProvider implements IMailProvider {
+  private account: TestAccount;
+
+  private transporter: Transporter;
+
+  private mailTemplateProvider: IMailTemplateProvider;
 
   constructor(
     @inject('MailTemplateProvider')
-    private mailTemplateProvider: IMailTemplateProvider,
+    mailTemplateProvider: IMailTemplateProvider,
   ) {
-    nodemailer.createTestAccount().then(account => {
-      const transporter = nodemailer.createTransport({
-        host: account.smtp.host,
-        port: account.smtp.port,
-        secure: account.smtp.secure,
+    this.mailTemplateProvider = mailTemplateProvider;
+    nodemailer.createTestAccount().then(testAccount => {
+      this.account = testAccount;
+      this.transporter = nodemailer.createTransport({
+        host: this.account.smtp.host,
+        port: this.account.smtp.port,
+        secure: this.account.smtp.secure,
         auth: {
-          user: account.user,
-          pass: account.pass,
+          user: this.account.user,
+          pass: this.account.pass,
         },
       });
-      // console.log(account);
-      this.client = transporter;
     });
   }
 
@@ -33,11 +38,11 @@ export default class EtherealMailProvider implements IMailProvider {
     subject,
     templateData,
   }: ISendMailDTO): Promise<void> {
-    const message = await this.client.sendMail({
+    const message = await this.transporter.sendMail({
       from: {
-        name: from?.name || 'Equipe GoBarber',
-        address: from?.email || 'equipe@gobarber.com.br',
-      }, // sender address
+        name: from?.name || 'Equipe BarberHome',
+        address: from?.email || 'empresa@barberhome.com.br',
+      },
       to: {
         name: to.name,
         address: to.email,
@@ -46,8 +51,9 @@ export default class EtherealMailProvider implements IMailProvider {
       html: await this.mailTemplateProvider.parse(templateData),
     });
 
-    // console.log('Message sent: %s', message.messageId);
-    // Preview only available when sending through an Ethereal account
+    console.log('Message sent: %s', message.messageId);
     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(message));
   }
 }
+
+export default EtherealMailProvider;

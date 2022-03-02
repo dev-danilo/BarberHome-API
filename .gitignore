@@ -1,9 +1,8 @@
-.idea/
-.vscode/
-node_modules/
-build/
+node_modules
+dist
 .env
-coverage/
-temp/*
+auth.js
 tmp/*
 !tmp/.gitkeep
+coverage
+requisitos.md

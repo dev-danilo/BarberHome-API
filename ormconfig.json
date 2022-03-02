@@ -1,5 +1,8 @@
 [
   {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
     "port": 5432,
     "username": "postgres",
     "password": "docker",
@@ -12,14 +15,17 @@
     ],
     "cli": {
       "migrationsDir": "./src/shared/infra/typeorm/migrations"
-    },
+    }
+  },
+  {
+    "name": "mongodb",
     "type": "mongodb",
     "host": "localhost",
     "port": 27017,
-    "database": "barberhome",
+    "database": "barberhome_mongo",
+    "useUnifiedTopology": true,
     "entities": [
       "./src/modules/**/infra/typeorm/schemas/*.ts"
-    ],
-    "useUnifiedTopology": true
+    ]
   }
 ]

@@ -1,9 +1,9 @@
-import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 import { uuid } from 'uuidv4';
 import UserToken from '@modules/users/infra/typeorm/entities/UserToken';
+import IUserTokensRepository from '@modules/users/repositories/IUserTokensRepository';
 
-class FakeUserTokensTrepository implements IUserTokensRepository {
-  private userTokens: UserToken[] = [];
+class FakeUserTokensRepository implements IUserTokensRepository {
+  private usersTokens: UserToken[] = [];
 
   public async generate(user_id: string): Promise<UserToken> {
     const userToken = new UserToken();
@@ -16,13 +16,13 @@ class FakeUserTokensTrepository implements IUserTokensRepository {
       updated_at: new Date(),
     });
 
-    this.userTokens.push(userToken);
+    this.usersTokens.push(userToken);
 
     return userToken;
   }
 
   public async findByToken(token: string): Promise<UserToken | undefined> {
-    const userToken = this.userTokens.find(
+    const userToken = this.usersTokens.find(
       findToken => findToken.token === token,
     );
 
@@ -30,4 +30,4 @@ class FakeUserTokensTrepository implements IUserTokensRepository {
   }
 }
 
-export default FakeUserTokensTrepository;
+export default FakeUserTokensRepository;

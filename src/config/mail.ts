@@ -1,20 +1,25 @@
+import {
+  MAIL_DRIVER,
+  MAIL_OWNER,
+  MAIL_DOMAIN,
+} from '@shared/utils/environment';
+
 interface IMailConfig {
   driver: 'ethereal' | 'ses';
   defaults: {
     from: {
-      email: string;
       name: string;
+      email: string;
     };
   };
 }
 
 export default {
-  driver: process.env.MAIL_DRIVER || 'ethereal',
-
+  driver: MAIL_DRIVER || 'ethereal',
   defaults: {
     from: {
-      email: '', // email cadastrado no dominio
-      name: 'Equipe GoBarber',
+      name: MAIL_OWNER,
+      email: MAIL_DOMAIN,
     },
   },
 } as IMailConfig;
