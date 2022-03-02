@@ -3,7 +3,7 @@
     "port": 5432,
     "username": "postgres",
     "password": "docker",
-    "database": "gobarber_postgres",
+    "database": "barberhome_postgres",
     "entities": [
       "./src/modules/**/infra/typeorm/entities/*.ts"
     ],
@@ -16,7 +16,7 @@
     "type": "mongodb",
     "host": "localhost",
     "port": 27017,
-    "database": "gobarber",
+    "database": "barberhome",
     "entities": [
       "./src/modules/**/infra/typeorm/schemas/*.ts"
     ],

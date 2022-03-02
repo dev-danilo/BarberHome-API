@@ -1,3 +1,9 @@
+# Configuração de ambiente
+  **Instalar Docker**
+  -docker run --name barberhome_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432
+  -docker run --name mongodb -p 27017:27017 -d -t mongo
+  -docker run --name redis -p 6379:6379 -d -t redis:alpine
+
 # Recuperação de senha 🚀
 
   **Requisitos Funcionais**
@@ -58,3 +64,5 @@
   - O usuário não pode agendar em um horário já ocupado;
   - O usuário não pode agendar em um horário que ja passou;
   - O usuário não pode agendar serviços consigo mesmo;
+
+
