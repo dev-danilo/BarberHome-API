@@ -6,6 +6,7 @@ import ora from 'ora';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import uploadConfig from '@config/storage';
+import uploadConfigg from '@config/upload';
 import AppError from '@shared/errors/AppError';
 import rateLimiter from './middlewares/rateLimiter';
 import routes from './routes';
@@ -17,7 +18,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.uploadsFolder));
+// app.use('/files', express.static(uploadConfigg.directory));
+
+app.use('/files', express.static(uploadConfig.tmpFolder));
 
 // Does not apply for /files route
 app.use(rateLimiter);

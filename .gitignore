@@ -4,5 +4,7 @@ dist
 auth.js
 tmp/*
 !tmp/.gitkeep
+!tmp/uploads
+tmp/uploads/*
 coverage
 requisitos.md

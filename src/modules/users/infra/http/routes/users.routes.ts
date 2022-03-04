@@ -5,8 +5,9 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import multer from 'multer';
 
 import uploadConfig from '@config/storage';
-
+import uploadConfigg from '@config/upload';
 import ensureAuthentication from '../middlewares/EnsureAuthentication';
+import UpdateUserAvatarServicee from '../../../services/UpdateUserAvatarServicee';
 
 import UsersController from '../controllers/UsersController';
 import UserAvatarController from '../controllers/UserAvatarController';
@@ -17,6 +18,7 @@ const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 
 const upload = multer(uploadConfig.multer);
+// const uploadd = multer(uploadConfigg);
 
 usersRouter.post(
   '/',
@@ -36,5 +38,26 @@ usersRouter.patch(
   upload.single('avatar'),
   userAvatarController.update,
 );
+// teste
+// usersRouter.patch(
+//   '/avatar',
+//   ensureAuthentication,
+//   uploadd.single('avatar'),
+//   async (request, response) => {
+//     try {
+//       const updateUserAvatar = new UpdateUserAvatarServicee();
+
+//       const user = await updateUserAvatar.execute({
+//         user_id: request.user.id,
+//         avatarFilename: request.file.filename,
+//       });
+
+//       return response.json(user);
+//     } catch (err) {
+//       console.log('teste');
+//       return response.status(400).json({ error: err.message });
+//     }
+//   },
+// );
 
 export default usersRouter;

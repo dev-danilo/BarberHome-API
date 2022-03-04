@@ -9,10 +9,10 @@ class ProvidersController {
     const { id: user_id } = request.user;
 
     const listProviders = container.resolve(ListProvidersService);
-
     const providers = await listProviders.execute({
       user_id,
     });
+    console.log(providers);
 
     return response.status(200).json(classToClass(providers));
   }
