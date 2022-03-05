@@ -1,4 +1,4 @@
-import { startOfHour, isBefore, getHours, format } from 'date-fns';
+import { startOfHour, isBefore, format, getHours, addHours } from 'date-fns';
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -41,7 +41,7 @@ class CreateAppointmentService {
     user_id,
     date,
   }: IRequest): Promise<Appointment> {
-    const appointmentDate = startOfHour(date);
+    const appointmentDate = startOfHour(addHours(date, 3)); // Melhorar a lógica utilizada aqui, pesquisar por timezone
 
     if (isBefore(appointmentDate, Date.now())) {
       throw new AppError("You can't book appointments in past dates");
