@@ -38,26 +38,5 @@ usersRouter.patch(
   upload.single('avatar'),
   userAvatarController.update,
 );
-// teste
-// usersRouter.patch(
-//   '/avatar',
-//   ensureAuthentication,
-//   uploadd.single('avatar'),
-//   async (request, response) => {
-//     try {
-//       const updateUserAvatar = new UpdateUserAvatarServicee();
-
-//       const user = await updateUserAvatar.execute({
-//         user_id: request.user.id,
-//         avatarFilename: request.file.filename,
-//       });
-
-//       return response.json(user);
-//     } catch (err) {
-//       console.log('teste');
-//       return response.status(400).json({ error: err.message });
-//     }
-//   },
-// );
 
 export default usersRouter;

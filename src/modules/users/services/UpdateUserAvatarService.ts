@@ -38,15 +38,13 @@ class UpdateUserAvatarService {
       // Deletar avatar anterior
       await this.storageProvider.deleteFile(user.avatar);
     }
-    console.log([user_id, avatarFilename]);
 
     const filename = await this.storageProvider.saveFile(avatarFilename);
 
     user.avatar = filename;
-    console.log(" avatar file ", user.avatar);
 
     await this.usersRepository.save(user);
-    console.log('user',user)
+
     return user;
   }
 }

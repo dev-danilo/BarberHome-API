@@ -6,7 +6,7 @@ import ora from 'ora';
 import cors from 'cors';
 import { errors } from 'celebrate';
 import uploadConfig from '@config/storage';
-import uploadConfigg from '@config/upload';
+
 import AppError from '@shared/errors/AppError';
 import rateLimiter from './middlewares/rateLimiter';
 import routes from './routes';

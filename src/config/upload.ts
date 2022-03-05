@@ -5,6 +5,7 @@ import path from 'path';
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
 export default {
+  driver: 'disk',
   directory: tmpFolder,
 
   storage: multer.diskStorage({
