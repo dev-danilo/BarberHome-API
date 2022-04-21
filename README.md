@@ -1,12 +1,15 @@
 #### Iniciando a API
 ```sh
-$ cd api
+$ cd BarberHome-API
 
 # Criando a imagem Docker do banco de dados:
 # Dentro do projeto, já existe uma arquivo docker-compose.yml que possui o
 # PostgreSQL como banco de dados, basta ter o Docker instalado em sua máquina.
+# Criar banco de dados inserindo a senha "docker" no postgresql
+# Criar .env igual ao env de exemplo
 $ docker-compose up -d # Iniciará em background e não irá bloquear o shell
 
+# Rodar utilizando node 12
 # Rodando as migrations para o banco de dados e iniciando o projeto
 $ yarn && yarn typeorm migration:run && yarn dev:server
 ```
